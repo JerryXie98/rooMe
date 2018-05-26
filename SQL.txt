@@ -6,19 +6,22 @@ CREATE TABLE food (
     lng            NUMERIC
 );
 
-INSERT INTO food (name, type, distance, lat, lng)
-VALUES ('Joey Ho', 'Cafe', 43.476506, -80.5388966 , 102.5);
-
-INSERT INTO food (name, type, distance, lat, lng)
-VALUES ('Joey Ho', 'Chinese', 43.476506, -80.5388966 , 102.5);
-
+-- Pizza Nova
 INSERT INTO food (name, type, allowed_distance, lat, lng)
 VALUES ('Joey Ho', 'restaurant', 2000, 43.46988, -80.534309);
 
-43.476506, -80.5388966 
+-- Paninos
+INSERT INTO food (name, type, allowed_distance, lat, lng)
+VALUES ('Joey Ho', 'restaurant', 2000, 43.4721463,-80.5389807);
 
-    // var candidates = [{"name": "jerry", "type" : "restaurant", 
-    // "lat": 43.46988, "lng" : -80.534309,
-    // "allowed_distance" : 2000},{"name": "jerry", "type" : "restaurant", 
-    // "lat": 43.46988, "lng" : -80.534309,
-    // "allowed_distance" : 2000}]; //this should come from server as list
+-- Mels
+INSERT INTO food (name, type, allowed_distance, lat, lng)
+VALUES ('Jerry Xie', 'restaurant', 2000, 43.4721925,-80.5370016);
+
+-- Kick Off
+INSERT INTO food (name, type, allowed_distance, lat, lng)
+VALUES ('Richard Ma', 'bar', 2000, 43.4723488,-80.5376904);
+
+-- Subway
+INSERT INTO food (name, type, allowed_distance, lat, lng)
+VALUES ('Tanay Desai', 'takeout', 2000, 43.4641124,-80.522667);

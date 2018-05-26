@@ -10,16 +10,23 @@ function getAll() {
 }
 
 function getMatches(type) {
-    let select = squel.select().where("type = '" + type + "'").from("food").toString();
-    return query(select);
+    let selectStr = squel.select().where("type = '" + type + "'").from("food").toString();
+    return query(selectStr);
 }
 
-function insertAll(name, type, distance, lat, lng) {
-    let insert = squel.insert()
+function insertRe(name, type, distance, lat, lng) {
+    let insertStr = squel.insert()
                 .into("food")
                 .setFields({name: name, type: type, allowed_distance: distance, lat: lat, lng: lng})
                 .toString();
-    return query(insert);
+    return query(insertStr);
+}
+
+function deleteRe(name) {
+    let delStr = squel.delete()
+                .from("food")
+                .where("name = '" + name + "'").toString();
+    return query(delStr);
 }
 
 function distance(user, rest_data, candidates) {
@@ -36,7 +43,7 @@ function distance(user, rest_data, candidates) {
             current_c = candidates[j];
         
             dist = pythagorean((current_r["geometry"]["location"]["lat"]-
-                            current_c["lat"]),
+                                current_c["lat"]),
                                 (current_r["geometry"]["location"]["lng"]-
                                 current_c["lng"]));
     
@@ -46,7 +53,8 @@ function distance(user, rest_data, candidates) {
                 min_dist = user_dist + dist;
                 min_location = {};
                 min_location["coord"] = current_r["geometry"]["location"];
-                min_location["name"] = current_r["name"];    
+                min_location["name"] = current_r["name"];
+                min_location["friend"] = current_c["name"];    
             }
         }
     }
@@ -83,6 +91,8 @@ module.exports = async (name, type, address, distAway, context) => {
 
     let rest_data = [];
     let result = {};
+    let lat = {};
+    let lng = {};
 
     await googleMapsClient.geocode({address: user["location"]})
      .asPromise()
@@ -91,6 +101,8 @@ module.exports = async (name, type, address, distAway, context) => {
          var data = res.json.results;
 
          user["location"] = data[0]["geometry"]["location"];
+         lat = user["location"]["lat"];
+         lng = user["location"]["lng"]
      })
      .catch((err) => {
          console.log(err);
@@ -107,7 +119,12 @@ module.exports = async (name, type, address, distAway, context) => {
          console.log(err);
      })
 
-    let insert = insertAll(name, type, distAway, user["location"]["lat"], user["location"]["long"]);
+    if (result.length === 0) {
+        let ins = await insertRe(name, type, distAway, lat, lng);
+        return "Hold tight, we are waiting for a match!"
+    } else {
+        let del = await deleteRe(name);
+    }
      
     return result;
 }

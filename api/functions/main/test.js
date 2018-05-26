@@ -1,9 +1,8 @@
+const {query, squel} = require('../../src/postgress.js');
 var googleMapsClient = require('@google/maps').createClient({
     key: 'AIzaSyAM0PNq8xe3q6oml9Yj-IpQaV0_yzYnKHA',
     Promise: Promise
 });
-
-const {query, squel} = require('../../src/postgress.js');
 
 function getAll() {
     let select = squel.select().from("food").toString();
@@ -15,11 +14,18 @@ function getMatches(type) {
     return query(select);
 }
 
-function insertAll(name, type, distance, lat, lng) {
+function insertRe(name, type, distance, lat, lng) {
     let insert = squel.insert()
                 .into("food")
-                .setFields({name: name, type: type, distance: distance, lat: lat, lng: lng})
+                .setFields({name: name, type: type, allowed_distance: distance, lat: lat, lng: lng})
                 .toString();
+    return query(insert);
+}
+
+function deleteRe(name) {
+    let del = squel.delete()
+                .from("food")
+                .where("name = '" + name + "'").toString();
     return query(insert);
 }
 
