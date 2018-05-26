@@ -8,6 +8,5 @@ const fb = require('../../src/facebook.js')
 module.exports = (room = 'world', context, callback) => {
     let result = fb(20);
     callback(null, `hello ${result}`);
-  
   };
   

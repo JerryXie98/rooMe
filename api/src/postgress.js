@@ -7,10 +7,14 @@ const client = new Client({
 });
 client.on('notification', msg => console.log(msg));
 client.on('notice', msg => console.log(msg));
-client.connect();
 
 const query = async (text, values) => {
+  const client = new Client({
+    connectionString: process.env.CONNECTION_STRING
+  });
+  client.connect();
   let result = await client.query(text, values);
+  client.end()
   return result;
 }
 
