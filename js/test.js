@@ -18,7 +18,7 @@ googleMapsClient.geocode({
 
   rest_data = []
   googleMapsClient.placesNearby({
-    location: { lat: 43.476506, lng: -80.5388966 }, 
+    location: user["location"],//{ lat: 43.476506, lng: -80.5388966 }, 
     radius : user["allowed_distance"], type : user["type"]
     }, function(err, nearby_response) {
      rest_data = nearby_response.json.results;
@@ -34,9 +34,9 @@ function distance(user,rest_data){
   for (i = 0; i < rest_data.length; i++){
     current_r = rest_data[i];
     user_dist = pythagorean((current_r["geometry"]["location"]["lat"]-
-    						43.476506),
-    		   			  (current_r["geometry"]["location"]["lng"]+
-    					  80.5388966));
+    						user["location"]["lat"]),
+    		   			  (current_r["geometry"]["location"]["lng"]-
+    					  user["location"]["lng"]));
     for(j = 0; j < candidates.length; j++){
     	current_c = candidates[j];
       
@@ -52,6 +52,7 @@ function distance(user,rest_data){
         min_location["name"] = current_r["name"]    	}
     }
   }
+  console.log(min_location)
   return min_location
 }
 
