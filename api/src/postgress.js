@@ -7,15 +7,14 @@ const client = new Client({
 });
 client.on('notification', msg => console.log(msg));
 client.on('notice', msg => console.log(msg));
+client.connect();
+
+const query = async (text, values) => {
+  let result = await client.query(text, values);
+  return result;
+}
 
 module.exports = {
-  db: {
-    query: async (text, values, callback) => {
-      await client.connect();
-      let result = await client.query(text, values, callback);
-      await client.end();
-      return result;
-    }
-  },
-  squel: squel
-};
+  query,
+  squel
+}
