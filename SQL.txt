@@ -1,0 +1,9 @@
+CREATE TABLE weather (
+    name            VARCHAR(50),
+    type            VARCHAR(50),        
+    distance        NUMERIC,          -- distance willing to travel
+    lat             NUMERIC,          
+    long            NUMERIC
+);
+
+INSERT INTO food ("Joey Ho", "Chinese", "10.2", "59.2", "102.5");
