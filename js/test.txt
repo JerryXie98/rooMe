@@ -1,0 +1,62 @@
+var googleMapsClient = require('@google/maps').createClient({
+  key: 'AIzaSyAM0PNq8xe3q6oml9Yj-IpQaV0_yzYnKHA'
+});
+	
+const user = {"name": "tanay", "type" : "restaurant", 
+			"location" : '330 Philip St, Waterloo ON',
+			"allowed_distance" : 1000}
+
+var candidates = [{"name": "jerry", "type" : "any", 
+			"location" : '330 Philip St, Waterloo ON',
+			"allowed_distance" : 1000}]
+
+googleMapsClient.geocode({
+  address: user["location"]
+}, function(err, geo_response) {
+  if (!err) {
+    var data = geo_response.json.results;
+    user["location"] = (data[0]["geometry"]["location"]);
+    console.log(user["location"])
+  }
+});
+
+
+var rest_data = []
+googleMapsClient.placesNearby({
+  location: { lat: 43.476506, lng: -80.5388966 }, 
+  radius : user["allowed_distance"], type : user["type"]
+  }, function(err, nearby_response) {
+   rest_data = nearby_response.json.results;
+});
+
+
+console.log(user["location"])
+
+/*
+var current_c, current_r, user_dist, dist;
+var min_dist = 99999999;
+var min_location = {};
+for (i = 0; i < rest_data.length; i++){
+  current_r = rest_data[i];
+  user_dist = pythagorean((current_r["geometry"]["location"]["lat"]-
+  						43.476506),
+  		   			  (current_r["geometry"]["location"]["long"]+
+  					  80.5388966));
+  for(j = 0; j < candidates.length; j++){
+  	current_c = candidates[j];
+  	dist = pythagorean((current_r["geometry"]["location"]["lat"]-
+  					current_c["lat"]),
+  		   			  (current_r["geometry"]["location"]["long"]-
+  						current_c["long"]));
+  	if (user_dist + dist < min_dist){
+  		min_dist = user_dist + dist;
+  		min_location = current_r["geometry"]["location"];
+  	}
+  }
+}
+
+console.log(min_location)
+*/
+function pythagorean(sideA, sideB){
+  return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
+}
