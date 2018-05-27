@@ -38,7 +38,7 @@ module.exports = async (context) => {
     //let out = await getMatches(type);
     //let candidates = out.rows;
     //let q1 = insertAll('Joey', 'restaurant', 2000, 43.46988, -80.534309);
-    let q2 = await getAll();
+    var temp = await getMatches('bar');
 
-    return q2.rows;
+    return temp.rows;
 }

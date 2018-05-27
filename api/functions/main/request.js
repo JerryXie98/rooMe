@@ -14,10 +14,10 @@ function getMatches(type) {
     return query(selectStr);
 }
 
-function insertRe(name, type, distance, lat, lng) {
+function insertRe(name, phone, type, distance, lat, lng) {
     let insertStr = squel.insert()
                 .into("food")
-                .setFields({name: name, type: type, allowed_distance: distance, lat: lat, lng: lng})
+                .setFields({name: name, phone: phoneNo, type: type, allowed_distance: distance, lat: lat, lng: lng})
                 .toString();
     return query(insertStr);
 }
@@ -54,7 +54,8 @@ function distance(user, rest_data, candidates) {
                 min_location = {};
                 min_location["coord"] = current_r["geometry"]["location"];
                 min_location["name"] = current_r["name"];
-                min_location["friend"] = current_c["name"];    
+                min_location["friend"] = current_c["name"];
+                min_location["phone"] = current_c["phone"];    
             }
         }
     }
@@ -69,12 +70,13 @@ return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
 /**
  * Make food buddy requests
  * @param {string} name
+ * @param {number} phoneNo
  * @param {string} type
  * @param {string} address
  * @param {number} distAway
  * @returns {any}
  */
-module.exports = async (name, type, address, distAway, context) => {
+module.exports = async (name, phoneNo, type, address, distAway, context) => {
     // Storing request in the data base
     //let out = await getMatches(type);
     //let candidates = out.rows;
@@ -120,11 +122,16 @@ module.exports = async (name, type, address, distAway, context) => {
      })
 
     if (result.length === 0) {
-        let ins = await insertRe(name, type, distAway, lat, lng);
+        let ins = await insertRe(name, phoneNo, type, distAway, lat, lng);
         return "Hold tight, we are waiting for a match!"
     } else {
         let del = await deleteRe(name);
     }
      
-    return result;
+    return {
+        "name": result.name,
+        "friend": result.friend,
+        "phone": result.phone
+    };
+    //return result;
 }
