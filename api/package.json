@@ -1,0 +1,24 @@
+{
+  "name": "rooMe",
+  "version": "0.0.0",
+  "description": "",
+  "author": "rooMe <jerry_xie@hotmail.com>",
+  "main": "functions/__main__.js",
+  "dependencies": {
+    "@google/maps": "^0.4.6",
+    "pg": "^7.4.3",
+    "sqlite": "^2.9.2",
+    "squel": "^5.12.1"
+  },
+  "private": true,
+  "stdlib": {
+    "build": "faaslang",
+    "name": "rooMe/rooMe",
+    "timeout": 10000,
+    "publish": true,
+    "personalize": {
+      "keys": [],
+      "user": []
+    }
+  }
+}
