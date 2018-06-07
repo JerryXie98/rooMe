@@ -1,0 +1,46 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 100px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.Modal-style {
+  overflow: hidden;
+  background-color: grey;
+  text-align: center;
+  margin-left: 25%;
+  height: 80%;
+  width: 50%;
+  text-align: center;
+}
+
+.Form-style {
+  box-shadow: #595214;
+  font-family: 'Roboto','sans-serif';
+  padding-top: 5px;
+  padding-bottom: 10px;
+  padding-left: 6px;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
