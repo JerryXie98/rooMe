@@ -1,13 +1,35 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 
-const CustomMarker = ({ text }) => <div>{text}</div>;
+const CustomMarker = ({ text }) => (
+  <div style={{
+    color: 'white', 
+    background: 'blue',
+    padding: '15px 10px',
+    display: 'inline-flex',
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '100%',
+    transform: 'translate(-50%, -50%)'
+  }}>
+    {text}
+  </div>
+);
 
 class FoodMap extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      matchFound: false
+    }
+  }
+
   static defaultProps = {
     center: {lat: 43.464, lng: -80.520},
     zoom: 13,
-  };
+  }
   
   render() {
     return (
@@ -18,15 +40,16 @@ class FoodMap extends Component {
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
-          <CustomMarker
-            lat={43.464}
-            lng={-80.520}
-            text={'Some Place!'}
-          />
+          { this.props.match.found ? 
+            <CustomMarker
+              lat={43.464}
+              lng={-80.520}
+              text={this.props.match.name}
+            /> : null}
         </GoogleMapReact>
       </div>
-    );
+    )
   }
 }
 
-export default FoodMap;
+export default FoodMap

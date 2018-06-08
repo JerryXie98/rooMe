@@ -2,16 +2,24 @@ import React, { Component } from 'react';
 import './App.css';
 import FoodMap from './FoodMap';
 import Modal from 'react-modal';
+import axios from 'axios';
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      modalIsOpen: false
-    };
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.requestSubmit = this.requestSubmit.bind(this);
+  }
+
+  state = {
+    modalIsOpen: false,
+    match: {
+      name: '',
+      phone: -1,
+      found: false
+    }
   }
 
   openModal() {
@@ -19,7 +27,21 @@ class App extends Component {
   }
 
   closeModal() {
-    this.setState({modalIsOpen: false})
+    this.setState({modalIsOpen: false});
+  }
+
+  requestSubmit() {
+    axios.get("https://jsonplaceholder.typicode.com/users")
+      .then(res => {
+        const match = res.data[0]
+        this.setState({ 
+          match: {
+            name: match.name,
+            phone: match.phone,
+            found: true
+          } 
+        });
+      });
   }
 
   render() {
@@ -27,7 +49,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">FeedMe</h1>
-          <button onClick={this.openModal}>I want food!</button>
+          <button onClick={this.requestSubmit}>I want food!</button>
           <Modal
             isOpen={this.state.modalIsOpen}
             onRequestClose={this.closeModal}
@@ -38,13 +60,14 @@ class App extends Component {
                     Name:<br/><input type="text" />
                 </label>
                 <input type="submit" value="Submit" />
+                <button onClick={this.requestSubmit}></button>
             </form>
           </Modal>
         </header>
-        <FoodMap></FoodMap>
+        <FoodMap match={this.state.match}></FoodMap>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
