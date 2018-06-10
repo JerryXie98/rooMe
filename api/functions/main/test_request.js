@@ -33,6 +33,7 @@ function distance(user, rest_data, candidates) {
     var current_c, current_place, dist_to_user, dist_to_can;
     var min_dist = 999999999;
     var type_match = false;
+    var result_list = [];
     for (i = 0; i < rest_data.length; i++){
         current_place = rest_data[i];
         dist_to_user = pythagorean((current_place["geometry"]["location"]["lat"]-
@@ -52,13 +53,14 @@ function distance(user, rest_data, candidates) {
 
                 type_match = true;
 
-                if (dist_to_user + dist_to_can < min_dist && dist_to_can < current_c["allowed_distance"]) {
-                    min_dist = dist_to_user + dist_to_can;
-                    min_location = {};
-                    min_location["coord"] = current_place["geometry"]["location"];
-                    min_location["name"] = current_place["name"];
-                    min_location["friend"] = current_c["name"];
-                    min_location["phone"] = current_c["phone"];    
+                if (dist_to_can < current_c["allowed_distance"]) {
+                    var location = {};
+                    location["coord"] = current_place["geometry"]["location"];
+                    location["name"] = current_place["name"];
+                    location["friend"] = current_c["name"];
+                    location["phone"] = current_c["phone"];
+                    location["distance"] = dist_to_can + dist_to_user;
+                    result_list.push(location);
                 }
             }
         }
@@ -66,11 +68,18 @@ function distance(user, rest_data, candidates) {
     if (!type_match){
         return {"Error" : "No match, try changing your type of place"}
     }
-    if (min_dist == 999999999) {
-        return {"Error" : "No matching user around your location"}
+    if (result_list.length == 0) {
+        return {"Error" : "No match, try expanding your distance"}
     }
-    console.log(min_location);
-    return min_location
+
+    
+    sorted_result = result_list.sort(function(first,second){
+        return first.distance - second.distance
+    });
+
+    output = {"list_of_locations" : sorted_result};
+
+    return output
 }
 
 function pythagorean(sideA, sideB){
@@ -126,6 +135,7 @@ module.exports = async (name, phoneNo, type, address, distAway, context) => {
      })
      .catch((err) => {
          console.log(err);
+         return {"error" : err}
      })
 
 
@@ -135,10 +145,11 @@ module.exports = async (name, phoneNo, type, address, distAway, context) => {
         console.log(res.json.results);
         rest_data = res.json.results;
 
-        result = distance(user, rest_data, candidates)
+        result = distance(user, rest_data, candidates);
      })
      .catch((err) => {
          console.log(err);
+         return {"error" : err}
      })
     
      if (Object.keys(result).includes("Error")){
@@ -151,10 +162,5 @@ module.exports = async (name, phoneNo, type, address, distAway, context) => {
         let del = await deleteRe(name);
     }*/
     
-    return {
-        "name": result.name,
-        "friend": result.friend,
-        "phone": result.phone
-    };
-    //return result;
+    return result
 }
