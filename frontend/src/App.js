@@ -67,7 +67,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="modal-container">
+      <div className="App">
         <header className="App-header">
           <h1>FeedMe</h1>
           <Button bsSize="large" onClick={this.openModal}>Get food!</Button>
