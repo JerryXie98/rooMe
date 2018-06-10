@@ -9,7 +9,7 @@
 
 .App-header {
   background-color: #222;
-  height: 100px;
+  height: 150px;
   padding: 20px;
   color: white;
 }
@@ -20,16 +20,6 @@
 
 .App-intro {
   font-size: large;
-}
-
-.Modal-style {
-  overflow: hidden;
-  background-color: grey;
-  text-align: center;
-  margin-left: 25%;
-  height: 80%;
-  width: 50%;
-  text-align: center;
 }
 
 .Form-style {

@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "bootstrap": "3",
     "google-map-react": "^1.0.3",
     "react": "^16.4.0",
+    "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.0",
     "react-modal": "^3.4.5",
     "react-router-dom": "^4.3.1",
