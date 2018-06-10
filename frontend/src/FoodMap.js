@@ -1,52 +1,55 @@
 import React, { Component } from 'react';
-import GoogleMapReact from 'google-map-react';
+import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
 
-const CustomMarker = ({ text }) => (
-  <div style={{
-    color: 'white', 
-    background: 'blue',
-    padding: '15px 10px',
-    display: 'inline-flex',
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '100%',
-    transform: 'translate(-50%, -50%)'
-  }}>
-    {text}
+const GoogleMapsWrapper = withScriptjs(withGoogleMap(props => {
+  const {onMapMounted, ...otherProps} = props;
+  return <div>
+    <GoogleMap {...otherProps} ref={c => {
+      onMapMounted && onMapMounted(c)
+      }}>
+    </GoogleMap>
   </div>
-);
+}));
 
 class FoodMap extends Component {
   constructor() {
     super();
 
     this.state = {
-      matchFound: false
+      matchFound: false,
+      myMarker: {},
+      markers: []
     }
+
+    this.changeLocation = this.changeLocation.bind(this);
   }
 
-  static defaultProps = {
-    center: {lat: 43.464, lng: -80.520},
-    zoom: 13,
+  changeLocation(e) {
+    let location = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng()
+    }
+    this.setState({ myMarker: location });
   }
   
   render() {
     return (
       // Important! Always set the container height explicitly
       <div style={{ height: '100vh', width: '100%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyAM0PNq8xe3q6oml9Yj-IpQaV0_yzYnKHA' }}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-        >
-          { this.props.match.found ? 
-            <CustomMarker
-              lat={43.464}
-              lng={-80.520}
-              text={this.props.match.name}
-            /> : null}
-        </GoogleMapReact>
+        <GoogleMapsWrapper
+          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+          loadingElement={<div style={{height: `100%`}}/>}
+          containerElement={<div style={{height: `100%`}}/>}
+          mapElement={<div style={{height: `100%`}}/>}
+          defaultZoom={13}
+          centre={{lat: 47, lng: -85}}
+          defaultCenter={{lat: 43.464, lng: -80.520}}
+          onClick={this.changeLocation}>
+          <Marker
+              key={'myMarker'}
+              position={{lat: this.state.myMarker.lat, lng: this.state.myMarker.lng}}
+            />
+        </GoogleMapsWrapper>
       </div>
     )
   }

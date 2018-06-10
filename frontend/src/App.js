@@ -53,6 +53,7 @@ class App extends Component {
             found: true
           } 
         });
+        this.closeModal();
       });
   }
 
@@ -110,7 +111,7 @@ class App extends Component {
               </form>
             </Modal.Body>
             <Modal.Footer>
-              <Button bsStyle="primary" onClick={this.closeModal}>Submit</Button>
+              <Button bsStyle="primary" onClick={this.requestSubmit}>Submit</Button>
               <Button onClick={this.closeModal}>Close</Button>
             </Modal.Footer>
           </Modal>
