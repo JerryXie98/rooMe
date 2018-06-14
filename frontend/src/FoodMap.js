@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
+import CustomMarker from './CustomMarker'
 
 const GoogleMapsWrapper = withScriptjs(withGoogleMap(props => {
   const {onMapMounted, ...otherProps} = props;
@@ -12,8 +13,8 @@ const GoogleMapsWrapper = withScriptjs(withGoogleMap(props => {
 }));
 
 class FoodMap extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       matchFound: false,
@@ -21,7 +22,10 @@ class FoodMap extends Component {
       markers: []
     }
 
+    this.displayInfo = {}
+
     this.changeLocation = this.changeLocation.bind(this);
+    this.toggleInfo = this.toggleInfo.bind(this);
   }
 
   changeLocation(e) {
@@ -30,6 +34,16 @@ class FoodMap extends Component {
       lng: e.latLng.lng()
     }
     this.setState({ myMarker: location });
+  }
+
+  toggleInfo(i) {
+    this.displayInfo.i = true;
+  }
+
+  handleClick(m, i) {
+    this.displayInfo[i] = true;
+    m.displayInfo = !m.displayInfo;
+    console.log(m);
   }
   
   render() {
@@ -47,11 +61,18 @@ class FoodMap extends Component {
           onClick={this.changeLocation}>
           <Marker
               key={'myMarker'}
-              position={{lat: this.state.myMarker.lat, lng: this.state.myMarker.lng}}
-            />
+              position={{lat: this.state.myMarker.lat, lng: this.state.myMarker.lng}} 
+          >
+          </Marker>
+          {this.props.matches.map((m)=> {
+            return (
+              <CustomMarker match={m}>
+              </CustomMarker>
+            )
+          })}
         </GoogleMapsWrapper>
       </div>
-    )
+    );
   }
 }
 

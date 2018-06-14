@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import FoodMap from './FoodMap';
 import axios from 'axios';
-import { Button, Modal, FormGroup, ControlLabel, FormControl, InputGroup } from 'react-bootstrap';
+import { Button, Modal, ControlLabel, FormControl, InputGroup } from 'react-bootstrap';
 
 class App extends Component {
   constructor() {
@@ -26,12 +26,7 @@ class App extends Component {
     lat: '',
     lng: '',
 
-    match: {
-      name: '',
-      phone: -1,
-      disance: -1,
-      found: false
-    }
+    matches: []
   }
 
   openModal() {
@@ -43,27 +38,32 @@ class App extends Component {
   }
 
   requestSubmit() {
-    axios.get("https://jsonplaceholder.typicode.com/users")
+    axios.get('https://roome.lib.id/rooMe@dev/main/test_request/?', {
+      params: {
+        name: 'Joe',
+        address: '123 Columbia St W Waterloo',
+        phoneNo: '5551234567',
+        type: 'bar',
+        distAway: 1000
+      }
+    })
       .then(res => {
-        const match = res.data[0]
-        this.setState({ 
-          match: {
-            name: match.name,
-            phone: match.phone,
-            found: true
-          } 
-        });
+        // const match = res.data[0]
+        this.setState({ matches: res.data.list_of_locations })
         this.closeModal();
-      });
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   handleChange(e) {
-    this.setState({[e.target.id]: e.target.value});
+    this.setState({ [e.target.id]: e.target.value });
   }
 
   handleMultiSelect(e) {
     let types = this.state.foodTypes.concat(e.target.value);
-    this.setState({foodTypes: types});
+    this.setState({ foodTypes: types });
   }
 
   render() {
@@ -78,36 +78,30 @@ class App extends Component {
             </Modal.Header>
             <Modal.Body>
               <form>
-                <FormGroup controlId="name">
-                  <ControlLabel>What's your name?</ControlLabel>
-                  <FormControl type="text" id="name" value={this.state.name} onChange={this.handleChange}/>
-                </FormGroup>
-                <FormGroup controlId="phoneNumber">
-                  <ControlLabel>What number can we reach you at?</ControlLabel>
-                  <FormControl type="number" id="phone" value={this.state.phone} placeholder="5551234567" onChange={this.handleChange}/>
-                </FormGroup>
-                <FormGroup controlId="placeType">
-                  <ControlLabel>What type of place are you looking for?</ControlLabel>
-                  <FormControl componentClass="select" id="foodType" onChange={this.handleMultiSelect} multiple>
-                    <option value="restaurant">Restaurant</option>
-                    <option value="cafe">Cafe</option>
-                    <option value="bar">Bar</option>
-                    <option value="other">...</option>
-                  </FormControl>
-                </FormGroup>
-                <FormGroup controlId="currentLocation">
-                  <ControlLabel>Where are you now?</ControlLabel>
-                  <FormControl type="text" value={this.state.temp} placeholder="330 Phillips St"/>
-                  <FormControl type="text" value={this.state.temp} placeholder="Ontario, Canada"/>
-                  <FormControl type="text" value={this.state.temp} placeholder="N2L3G9"/>
-                </FormGroup>
-                <FormGroup controlId="distanceTravel">
-                  <ControlLabel>How far are you willing to travel? (in metres)</ControlLabel>
-                  <InputGroup>
-                    <FormControl type="number" id="distance" value={this.state.distance} placeholder="1000" onChange={this.handleChange}/>
-                    <InputGroup.Addon>m</InputGroup.Addon>
-                  </InputGroup>
-                </FormGroup>
+                <ControlLabel>What's your name?</ControlLabel>
+                <FormControl type="text" id="name" value={this.state.name} onChange={this.handleChange}/>
+                <br/>
+                <ControlLabel>What number can we reach you at?</ControlLabel>
+                <FormControl type="number" id="phone" value={this.state.phone} placeholder="5551234567" onChange={this.handleChange}/>
+                <br/>
+                <ControlLabel>What type of place are you looking for?</ControlLabel>
+                <FormControl componentClass="select" id="foodType" onChange={this.handleMultiSelect} multiple>
+                  <option value="restaurant">Restaurant</option>
+                  <option value="cafe">Cafe</option>
+                  <option value="bar">Bar</option>
+                  <option value="other">...</option>
+                </FormControl>
+                <br/>
+                <ControlLabel>Where are you now?</ControlLabel>
+                <FormControl type="text" value={this.state.temp} placeholder="330 Phillips St"/>
+                <FormControl type="text" value={this.state.temp} placeholder="Ontario, Canada"/>
+                <FormControl type="text" value={this.state.temp} placeholder="N2L3G9"/>
+                <br/>
+                <ControlLabel>How far are you willing to travel? (in metres)</ControlLabel>
+                <InputGroup>
+                  <FormControl type="number" id="distance" value={this.state.distance} placeholder="1000" onChange={this.handleChange}/>
+                  <InputGroup.Addon>m</InputGroup.Addon>
+                </InputGroup>
               </form>
             </Modal.Body>
             <Modal.Footer>
@@ -116,7 +110,7 @@ class App extends Component {
             </Modal.Footer>
           </Modal>
         </header>
-        <FoodMap match={this.state.match}></FoodMap>
+        <FoodMap matches={this.state.matches}></FoodMap>
       </div>
     )
   }
