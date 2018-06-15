@@ -35,16 +35,6 @@ class FoodMap extends Component {
     }
     this.setState({ myMarker: location });
   }
-
-  toggleInfo(i) {
-    this.displayInfo.i = true;
-  }
-
-  handleClick(m, i) {
-    this.displayInfo[i] = true;
-    m.displayInfo = !m.displayInfo;
-    console.log(m);
-  }
   
   render() {
     return (
