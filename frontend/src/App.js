@@ -21,6 +21,8 @@ class App extends Component {
     name: '',
     phone: '',
     address: '',
+    street: '',
+    city: '',
     foodTypes: [],
     distance: '',
     lat: '',
@@ -40,20 +42,21 @@ class App extends Component {
   requestSubmit() {
     axios.get('https://roome.lib.id/rooMe@dev/main/test_request/?', {
       params: {
-        name: 'Joe',
-        address: '123 Columbia St W Waterloo',
-        phoneNo: '5551234567',
-        type: 'bar',
+        name: this.state.name,
+        address: this.state.street + " " + this.state.city,
+        phoneNo: this.state.phone,
+        type: this.state.foodTypes.join(),
         distAway: 1000
       }
     })
       .then(res => {
-        // const match = res.data[0]
         this.setState({ matches: res.data.list_of_locations })
         this.closeModal();
+        console.log(res);
       })
       .catch(err => {
         console.log(err);
+        console.log(this.state.foodTypes);
       })
   }
 
@@ -62,8 +65,12 @@ class App extends Component {
   }
 
   handleMultiSelect(e) {
-    let types = this.state.foodTypes.concat(e.target.value);
-    this.setState({ foodTypes: types });
+    if (e.target.value in this.state.foodTypes) {
+      return
+    } else {
+      let types = this.state.foodTypes.concat(e.target.value);
+      this.setState({ foodTypes: types });
+    }
   }
 
   render() {
@@ -85,7 +92,7 @@ class App extends Component {
                 <FormControl type="number" id="phone" value={this.state.phone} placeholder="5551234567" onChange={this.handleChange}/>
                 <br/>
                 <ControlLabel>What type of place are you looking for?</ControlLabel>
-                <FormControl componentClass="select" id="foodType" onChange={this.handleMultiSelect} multiple>
+                <FormControl componentClass="select" id="type" onChange={this.handleMultiSelect} multiple>
                   <option value="restaurant">Restaurant</option>
                   <option value="cafe">Cafe</option>
                   <option value="bar">Bar</option>
@@ -93,9 +100,8 @@ class App extends Component {
                 </FormControl>
                 <br/>
                 <ControlLabel>Where are you now?</ControlLabel>
-                <FormControl type="text" value={this.state.temp} placeholder="330 Phillips St"/>
-                <FormControl type="text" value={this.state.temp} placeholder="Ontario, Canada"/>
-                <FormControl type="text" value={this.state.temp} placeholder="N2L3G9"/>
+                <FormControl type="text" id="street" value={this.state.street} placeholder="330 Phillips St" onChange={this.handleChange}/>
+                <FormControl type="text" id="city" value={this.state.city} placeholder="Waterloo" onChange={this.handleChange}/>
                 <br/>
                 <ControlLabel>How far are you willing to travel? (in metres)</ControlLabel>
                 <InputGroup>
