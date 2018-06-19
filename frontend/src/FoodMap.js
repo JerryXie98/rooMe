@@ -25,7 +25,6 @@ class FoodMap extends Component {
     this.displayInfo = {}
 
     this.changeLocation = this.changeLocation.bind(this);
-    this.toggleInfo = this.toggleInfo.bind(this);
   }
 
   changeLocation(e) {
@@ -41,7 +40,7 @@ class FoodMap extends Component {
       // Important! Always set the container height explicitly
       <div style={{ height: '100vh', width: '100%' }}>
         <GoogleMapsWrapper
-          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+          googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM0PNq8xe3q6oml9Yj-IpQaV0_yzYnKHA&v=3.exp&libraries=geometry,drawing,places"
           loadingElement={<div style={{height: `100%`}}/>}
           containerElement={<div style={{height: `100%`}}/>}
           mapElement={<div style={{height: `100%`}}/>}
