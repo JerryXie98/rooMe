@@ -8,3 +8,5 @@ bundle.js
 node_modules/
 html/node_modules/
 js/node_modules/
+# Testing purposes
+test/

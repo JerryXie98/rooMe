@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const filepath = path.join('build', 'index.html');
+const filepath = path.join('build', 'static', 'js', 'main.d616238e.js');
 let index = fs.existsSync(filepath) ?
   fs.readFileSync(filepath) :
   new Buffer('No index.html specified');
@@ -20,6 +20,6 @@ module.exports = (context, callback) => {
 
   }
 
-  return callback(null, index, {'Content-Type': 'text/html; charset=utf-8'});
+  return callback(null, index, {'Content-Type': 'text/javascript'});
 
 };
