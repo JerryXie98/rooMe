@@ -1,3 +1,5 @@
+//https://googlemaps.github.io/google-maps-services-js/docs/GoogleMapsClient.html
+
 const {query, squel} = require('../../src/postgress.js');
 var googleMapsClient = require('@google/maps').createClient({
     key: 'AIzaSyAM0PNq8xe3q6oml9Yj-IpQaV0_yzYnKHA',
@@ -29,7 +31,7 @@ function deleteRe(name) {
     return query(delStr);
 }
 
-function distance(user, rest_data, candidates) {
+function distance(user, rest_data, candidates, type) {
     var current_c, current_place, dist_to_user, dist_to_can;
     var min_dist = 999999999;
     var type_match = false;
@@ -49,9 +51,9 @@ function distance(user, rest_data, candidates) {
                                 (current_place["geometry"]["location"]["lng"]-
                                 current_c["lng"]));
     
-            if (current_c["type"] == "any" || user["type"] == "any" || current_c["type"] == user["type"]){
+            if (current_c["type"] == "any" || user["type"] == "any" || match(current_c["type"], type)) {
 
-                type_match = true;
+              type_match = true;
 
                 if (dist_to_can < current_c["allowed_distance"]) {
                     var location = {};
@@ -59,6 +61,7 @@ function distance(user, rest_data, candidates) {
                     location["name"] = current_place["name"];
                     location["friend"] = current_c["name"];
                     location["phone"] = current_c["phone"];
+                    location["type"] = current_place["types"];
                     location["distance"] = dist_to_can + dist_to_user;
                     result_list.push(location);
                 }
@@ -86,6 +89,15 @@ function pythagorean(sideA, sideB){
 return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
 }
 
+function match(typeA, typeB) {
+    
+    for(var i = 0; i < typeA.length; i++ ){
+        if(typeA[i] == typeB){
+            return true
+        }
+    }
+    return false
+}
 /**
  * Make food buddy requests
  * @param {string} name
@@ -124,34 +136,52 @@ module.exports = async (name, phoneNo, type, address, distAway, context) => {
     let lng = {};
 
     await googleMapsClient.geocode({address: user["location"]})
-     .asPromise()
-     .then((res) => {
-         console.log(res.json.results);
-         var data = res.json.results;
-         user["location"] = data[0]["geometry"]["location"];
-         lat = user["location"]["lat"];
-         lng = user["location"]["lng"];
-
-     })
-     .catch((err) => {
-         console.log(err);
-         return {"error" : err}
-     })
-
-
-    await googleMapsClient.placesNearby({location: user["location"], radius: user["allowed_distance"], type: user["type"]})
-     .asPromise()
-     .then((res) => {
+    .asPromise()
+    .then((res) => {
         console.log(res.json.results);
-        rest_data = res.json.results;
+        var data = res.json.results;
+        user["location"] = data[0]["geometry"]["location"];
+        lat = user["location"]["lat"];
+        lng = user["location"]["lng"];
 
-        result = distance(user, rest_data, candidates);
-     })
-     .catch((err) => {
-         console.log(err);
-         return {"error" : err}
-     })
-    
+    })
+    .catch((err) => {
+        console.log(err);
+        return {"error" : err}
+    })
+    result = {};
+    if (user["type"] != "any"){
+        
+        for(var i = 0; i < user["type"].length; i++){
+            await googleMapsClient.placesNearby({location: user["location"], radius: user["allowed_distance"], type: user["type"][i]})
+            .asPromise()
+            .then((res) => {
+                console.log(res.json.results);
+                rest_data = res.json.results;
+                //result = res.json;
+                result[user["type"][i]] = distance(user, rest_data, candidates, user["type"][i]);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return {"error" : err}
+                })
+        }
+    }
+    else {
+        await googleMapsClient.placesNearby({location: user["location"], radius: user["allowed_distance"]})
+        .asPromise()
+        .then((res) => {
+            console.log(res.json.results);
+            rest_data = res.json.results;
+            //result = res.json;
+            result = distance(user, rest_data, candidates);
+            })
+            .catch((err) => {
+                console.log(err);
+                return {"error" : err}
+            })
+        }
+        
      if (Object.keys(result).includes("Error")){
         return result
      }
