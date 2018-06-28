@@ -13,18 +13,11 @@ const GoogleMapsWrapper = withScriptjs(withGoogleMap(props => {
 }));
 
 class FoodMap extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      matchFound: false,
-      myMarker: {},
-      markers: []
-    }
-
-    this.displayInfo = {}
-
-    this.changeLocation = this.changeLocation.bind(this);
+  
+  state = {
+    matchFound: false,
+    myMarker: {},
+    markers: []
   }
 
   changeLocation(e) {
@@ -47,7 +40,7 @@ class FoodMap extends Component {
           defaultZoom={13}
           centre={{lat: 47, lng: -85}}
           defaultCenter={{lat: 43.464, lng: -80.520}}
-          onClick={this.changeLocation}>
+          onClick={(e) => this.changeLocation(e)}>
           <Marker
               key={'myMarker'}
               position={{lat: this.state.myMarker.lat, lng: this.state.myMarker.lng}} 

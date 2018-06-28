@@ -5,16 +5,7 @@ import axios from 'axios';
 import { Button, Modal, ControlLabel, FormControl, InputGroup } from 'react-bootstrap';
 
 class App extends Component {
-  constructor() {
-    super();
-
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.requestSubmit = this.requestSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleMultiSelect = this.handleMultiSelect.bind(this);
-  }
-
+  
   state = {
     showModal: false,
 
@@ -78,21 +69,21 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1>FeedMe</h1>
-          <Button bsSize="large" onClick={this.openModal}>Get food!</Button>
-          <Modal show={this.state.showModal} onHide={this.closeModal}>
+          <Button bsSize="large" onClick={() => this.openModal()}>Get food!</Button>
+          <Modal show={this.state.showModal} onHide={() => this.closeModal()}>
             <Modal.Header>
               <Modal.Title>Request</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <form>
                 <ControlLabel>What's your name?</ControlLabel>
-                <FormControl type="text" id="name" value={this.state.name} onChange={this.handleChange}/>
+                <FormControl type="text" id="name" value={this.state.name} onChange={(e) => this.handleChange(e)}/>
                 <br/>
                 <ControlLabel>What number can we reach you at?</ControlLabel>
-                <FormControl type="number" id="phone" value={this.state.phone} placeholder="5551234567" onChange={this.handleChange}/>
+                <FormControl type="number" id="phone" value={this.state.phone} placeholder="5551234567" onChange={(e) => this.handleChange(e)}/>
                 <br/>
                 <ControlLabel>What type of place are you looking for?</ControlLabel>
-                <FormControl componentClass="select" id="type" onChange={this.handleMultiSelect} multiple>
+                <FormControl componentClass="select" id="type" onChange={(e) => this.handleMultiSelect(e)} multiple>
                   <option value="restaurant">Restaurant</option>
                   <option value="cafe">Cafe</option>
                   <option value="bar">Bar</option>
@@ -100,19 +91,19 @@ class App extends Component {
                 </FormControl>
                 <br/>
                 <ControlLabel>Where are you now?</ControlLabel>
-                <FormControl type="text" id="street" value={this.state.street} placeholder="330 Phillips St" onChange={this.handleChange}/>
-                <FormControl type="text" id="city" value={this.state.city} placeholder="Waterloo" onChange={this.handleChange}/>
+                <FormControl type="text" id="street" value={this.state.street} placeholder="330 Phillips St" onChange={(e) => this.handleChange(e)}/>
+                <FormControl type="text" id="city" value={this.state.city} placeholder="Waterloo" onChange={(e) => this.handleChange(e)}/>
                 <br/>
                 <ControlLabel>How far are you willing to travel? (in metres)</ControlLabel>
                 <InputGroup>
-                  <FormControl type="number" id="distance" value={this.state.distance} placeholder="1000" onChange={this.handleChange}/>
+                  <FormControl type="number" id="distance" value={this.state.distance} placeholder="1000" onChange={(e) => this.handleChange(e)}/>
                   <InputGroup.Addon>m</InputGroup.Addon>
                 </InputGroup>
               </form>
             </Modal.Body>
             <Modal.Footer>
-              <Button bsStyle="primary" onClick={this.requestSubmit}>Submit</Button>
-              <Button onClick={this.closeModal}>Close</Button>
+              <Button bsStyle="primary" onClick={() => this.requestSubmit()}>Submit</Button>
+              <Button onClick={() => this.closeModal()}>Close</Button>
             </Modal.Footer>
           </Modal>
         </header>

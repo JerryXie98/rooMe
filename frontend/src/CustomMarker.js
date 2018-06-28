@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { Marker, InfoWindow } from 'react-google-maps';
 
 class CustomMarker extends Component {
-    constructor(props) {
-        super(props);
     
-        this.state = {
-          showInfo: false
-        }
+    constructor() {
+        super()
 
         this.toggleInfo = this.toggleInfo.bind(this)
+    }
+
+    state = {
+        showInfo: false
     }
 
     toggleInfo() {
