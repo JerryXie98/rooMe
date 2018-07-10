@@ -1,12 +1,16 @@
 # Logs
 logs
 *.Logs
+
 # Compiled directory and file
 build/
 bundle.js
+
 # Dependency directories
 node_modules/
 html/node_modules/
 js/node_modules/
+
 # Testing purposes
 test/
+stdlib-react/

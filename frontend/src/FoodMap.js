@@ -16,7 +16,10 @@ class FoodMap extends Component {
   
   state = {
     matchFound: false,
-    myMarker: {},
+    myMarker: {
+      lat: 43.464,
+      lng: -80.520
+    },
     markers: []
   }
 

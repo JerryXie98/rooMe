@@ -41,13 +41,19 @@ class App extends Component {
       }
     })
       .then(res => {
-        this.setState({ matches: res.data.list_of_locations })
+        // Check if request can be matched, otherwise make new request
+        if (res.data.list_of_locations.length < 1) {
+          this.setState({ matches: res.data.list_of_locations })
+        } else {
+          alert('No matches found, would you like to submit a request?')
+        }
+
         this.closeModal();
         console.log(res);
       })
       .catch(err => {
         console.log(err);
-        console.log(this.state.foodTypes);
+        // console.log(this.state.foodTypes);
       })
   }
 
