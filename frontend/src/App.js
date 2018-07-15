@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import FoodMap from './FoodMap';
+import FoodMap from './components/FoodMap';
 import axios from 'axios';
 import { Button, Modal, ControlLabel, FormControl, InputGroup } from 'react-bootstrap';
 
@@ -70,6 +70,24 @@ class App extends Component {
     }
   }
 
+  // Filling forms with fake data for easier testing
+  handleTestInputs() {
+    const testData = {
+      name: 'John Smith',
+      phone: 555123456,
+      foodTypes: ['Restaurant'],
+      street: '330 Phillips St',
+      city: 'Waterloo',
+      distance: '1000'
+    }
+    this.setState({ name: testData.name})
+    this.setState({ phone: testData.phone})
+    this.setState({ foodTypes: testData.foodTypes})
+    this.setState({ street: testData.street})
+    this.setState({ city: testData.city })
+    this.setState({ distance: testData.distance })
+  } 
+
   render() {
     return (
       <div className="App">
@@ -77,6 +95,7 @@ class App extends Component {
           <h1>FeedMe</h1>
           <Button bsSize="large" onClick={() => this.openModal()}>Get food!</Button>
           <Modal show={this.state.showModal} onHide={() => this.closeModal()}>
+            <Button bsStyle="info" className="test-input" onClick={() => this.handleTestInputs()}>Test Inputs</Button>
             <Modal.Header>
               <Modal.Title>Request</Modal.Title>
             </Modal.Header>

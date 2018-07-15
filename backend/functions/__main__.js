@@ -7,7 +7,7 @@ let index = fs.existsSync(filepath) ?
   new Buffer('No index.html specified');
 
 /**
- * Serves index.html for dashboard.
+ * Serves index.html for feed-us application
  * @returns {Buffer}
  */
 module.exports = (context, callback) => {

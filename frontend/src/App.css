@@ -34,6 +34,12 @@
   padding-left: 6px;
 }
 
+.test-input {
+  right: 0;
+  margin: 10px;
+  position: absolute;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

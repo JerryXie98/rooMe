@@ -83,7 +83,7 @@ function distance(user, rest_data, candidates) {
 }
 
 function pythagorean(sideA, sideB){
-return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
+    return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
 }
 
 /**
