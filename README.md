@@ -5,6 +5,8 @@ Now it aims to help people find company to grab food with.
 
 [Check it out here!](https://feed-us.herokuapp.com/)
 
+or [here](https://roome.lib.id/rooMe@dev/)
+
 ## Frontend
 
 The frontend is done all through React.
@@ -33,7 +35,7 @@ The backend is built with [stdlib](https://stdlib.com/).
 To deploy directly onto the cloud:
 
 ```
-cd api
+cd backend
 
 lib up dev
 ```

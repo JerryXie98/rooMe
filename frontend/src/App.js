@@ -31,7 +31,7 @@ class App extends Component {
   }
 
   requestSubmit() {
-    axios.get('https://roome.lib.id/rooMe@dev/main/test_request/?', {
+    axios.get('https://roome.lib.id/rooMe@dev/api/test_request/?', {
       params: {
         name: this.state.name,
         address: this.state.street + " " + this.state.city,
@@ -42,14 +42,14 @@ class App extends Component {
     })
       .then(res => {
         // Check if request can be matched, otherwise make new request
-        if (res.data.list_of_locations.length < 1) {
+        if (res.data.list_of_locations.length > 0) {
           this.setState({ matches: res.data.list_of_locations })
         } else {
           alert('No matches found, would you like to submit a request?')
         }
 
         this.closeModal();
-        console.log(res);
+        // console.log(res);
       })
       .catch(err => {
         console.log(err);
