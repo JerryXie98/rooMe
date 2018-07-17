@@ -41,8 +41,8 @@ class FoodMap extends Component {
           containerElement={<div style={{height: `100%`}}/>}
           mapElement={<div style={{height: `100%`}}/>}
           defaultZoom={13}
-          centre={{lat: 47, lng: -85}}
-          defaultCenter={{lat: 43.464, lng: -80.520}}
+          defaultCentre={{lat: 47, lng: -85}}
+          center={{lat: this.props.myLocation.lat, lng: this.props.myLocation.lng}}
           onClick={(e) => this.changeLocation(e)}>
           <Marker
               key={'myMarker'}
@@ -51,7 +51,7 @@ class FoodMap extends Component {
           </Marker>
           {this.props.matches.map((m)=> {
             return (
-              <CustomMarker match={m}>
+              <CustomMarker match={m} key={m.name}>
               </CustomMarker>
             )
           })}

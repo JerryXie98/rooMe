@@ -1,7 +1,7 @@
 {
-  "name": "enghacks",
+  "name": "feed-us",
   "version": "1.0.0",
-  "description": "for enghack",
+  "description": "Food social network",
   "main": "index.js",
   "scripts": {
     "dev": "webpack -d --watch",
@@ -10,7 +10,7 @@
     "react-dev": "webpack -d --watch",
     "server-dev": "nodemon server/index.js"
   },
-  "author": "Xiuyuan Ma",
+  "author": "Jerry Xie",
   "license": "ISC",
   "dependencies": {
     "babel-core": "^6.26.3",

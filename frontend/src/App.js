@@ -9,6 +9,7 @@ class App extends Component {
   state = {
     showModal: false,
 
+    // Request Parameters
     name: '',
     phone: '',
     address: '',
@@ -19,7 +20,11 @@ class App extends Component {
     lat: '',
     lng: '',
 
-    matches: []
+    matches: [],
+    myLocation: {
+      lat: 43.464,
+      lng: -80.520
+    }
   }
 
   openModal() {
@@ -31,7 +36,19 @@ class App extends Component {
   }
 
   requestSubmit() {
-    axios.get('https://roome.lib.id/rooMe@dev/api/test_request/?', {
+    const url = 'https://roome.lib.id/rooMe@dev/api/'
+    axios.get(url + 'geo_code/?address=' + this.state.street + " " + this.state.city)
+      .then(res => {
+        if (res) {
+          this.setState({ myLocation: res.data})
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+    // main request
+    axios.get(url + 'request/?', {
       params: {
         name: this.state.name,
         address: this.state.street + " " + this.state.city,
@@ -49,11 +66,9 @@ class App extends Component {
         }
 
         this.closeModal();
-        // console.log(res);
       })
       .catch(err => {
         console.log(err);
-        // console.log(this.state.foodTypes);
       })
   }
 
@@ -132,7 +147,7 @@ class App extends Component {
             </Modal.Footer>
           </Modal>
         </header>
-        <FoodMap matches={this.state.matches}></FoodMap>
+        <FoodMap matches={this.state.matches} myLocation={this.state.myLocation}></FoodMap>
       </div>
     )
   }

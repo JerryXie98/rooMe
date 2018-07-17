@@ -29,10 +29,11 @@ module.exports = async (address,  context) => {
              const bounds = res.json.results[0].geometry.bounds
              data = averageCoord(bounds.northeast, bounds.southwest)
          }
-         return data
      })
      .catch((err) => {
          console.log(err);
          return {"error" : err}
      })
+
+    return data
 }
