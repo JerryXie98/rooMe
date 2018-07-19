@@ -24,16 +24,16 @@ module.exports = async (address,  context) => {
          if (res.json.results.length !== 1) {
              return {
                  "error":  "Error parsing address to geo-code"
-             }
+             };
          } else {
-             const bounds = res.json.results[0].geometry.bounds
-             data = averageCoord(bounds.northeast, bounds.southwest)
+             const bounds = res.json.results[0].geometry.bounds;
+             data = averageCoord(bounds.northeast, bounds.southwest);
          }
      })
      .catch((err) => {
          console.log(err);
-         return {"error" : err}
+         return {"error" : err};
      })
 
-    return data
+    return data;
 }
