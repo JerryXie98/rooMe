@@ -13,7 +13,7 @@ module.exports = async (addy, api_key, context) => {
         Promise: Promise
     });
 
-	await googleMapsClient.geocode({address: addy})
+	await googleMapsClient.geocode({'address': addy})
      .asPromise()
      .then((res) => {
          //console.log(res.json.results);
