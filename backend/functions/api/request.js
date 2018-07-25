@@ -156,7 +156,9 @@ function get_places_only(user, rest_data){
         return second.score - first.score
     });
 
-    return sorted_result;
+    output = {"list_of_locations" : sorted_result};
+
+    return output;
 
 }
 
