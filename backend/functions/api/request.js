@@ -52,13 +52,13 @@ module.exports = async (name, phoneNo, type, address, distAway, context) => {
         //candidates = temp.rows;
         candidates = [{
             "name": "Fake Person",
-            "type": "any",
+            "type": "bar",
             "lat" : 43.476506,
             "lng" : -80.538897,
             "allowed_distance" : 1000,
             "phone": 5559876543
         }];
-
+    
         let rest_data = [];
         let result = {};
         let lat = {};
@@ -104,13 +104,70 @@ module.exports = async (name, phoneNo, type, address, distAway, context) => {
         return result
     }
 }
+function get_overall_score(dist, rating, price) {
+
+    if (price == -1){
+        return (rating * 0.5 - dist * 0.5)
+    }
+    else {
+        return (rating*0.4 - dist*0.4 + (price - 3)*0.2)
+    }
+
+}
+
+function get_places_only(user, rest_data){
+
+    var dist_to_user, rating, price_level, score;
+    var result_list = [];
+
+    for (i = 0; i < rest_data.length; i++){
+        current_place = rest_data[i];
+        dist_to_user = pythagorean((current_place["geometry"]["location"]["lat"]-
+                                user["location"]["lat"]),
+                                (current_place["geometry"]["location"]["lng"]-
+                                user["location"]["lng"]));
+        rating = current_place["rating"];
+        if (current_place["price_level"]){
+            price_level = current_place["price_level"];
+        }
+        else{
+            price_level = -1;
+        }
+
+        location = {};
+        score = get_overall_score(dist_to_user, rating, price_level);  
+        location["coord"] = current_place["geometry"]["location"];
+        location["name"] = current_place["name"];
+        //location["price_level"] = price_level;
+        location["score"] = score; 
+
+        if (rest_data.hasOwnProperty('opening_hours')){
+            if(rest_data["opening_hours"]["open_now"]){
+                location["open_now"] = true;
+                result_list.push(location);
+            }
+        }
+        else{
+            result_list.push(location)
+        }
+        
+    }
+    sorted_result = result_list.sort(function(first,second){
+        return second.score - first.score
+    });
+
+    return sorted_result;
+
+}
 
 // Main distance algorithm to find matches between candidates
 function distance(user, rest_data, candidates) {
     var current_c, current_place, dist_to_user, dist_to_can;
     var min_dist = 999999999;
-    var type_match = false;
     var result_list = [];
+    if (rest_data.length == 0){
+        return {"Error" : "No places found near you. Try expanding distance or choose other types."}
+    }
     for (i = 0; i < rest_data.length; i++){
         current_place = rest_data[i];
         dist_to_user = pythagorean((current_place["geometry"]["location"]["lat"]-
@@ -128,8 +185,6 @@ function distance(user, rest_data, candidates) {
     
             if (current_c["type"] == "any" || user["type"] == "any" || current_c["type"] == user["type"]){
 
-                type_match = true;
-
                 if (dist_to_can < current_c["allowed_distance"]) {
                     var location = {};
                     location["coord"] = current_place["geometry"]["location"];
@@ -142,13 +197,11 @@ function distance(user, rest_data, candidates) {
             }
         }
     }
-    if (!type_match){
-        return {"Error" : "No match, try changing your type of place"}
-    }
-    if (result_list.length == 0) {
-        return {"Error" : "No match, try expanding your distance"}
-    }
 
+    if (result_list.length == 0) {
+        //return {"Error" : "No match, try expanding your distance"}
+        return get_places_only(user, rest_data);
+    }
     
     sorted_result = result_list.sort(function(first,second){
         return first.distance - second.distance
