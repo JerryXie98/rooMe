@@ -15,7 +15,7 @@ class App extends Component {
     address: '',
     street: '',
     city: '',
-    foodTypes: [],
+    foodTypes: ['Restaurant'],
     distance: '',
     lat: '',
     lng: '',
